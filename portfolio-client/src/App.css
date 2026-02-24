@@ -1,0 +1,76 @@
+@import "tailwindcss";
+
+:root {
+  --primary-color: #000000;
+  --secondary-color: #f8f4eb;
+  --supplemetary-color: #393e46;
+  --accent-color: #d8d8d8;
+  --head-font-family: "Arimo", sans-serif;
+  --body-font-family: "DM Sans", sans-serif;
+  --additional-font: "Playfair Display", "sans-serif"
+}
+
+/* General: */
+
+body {
+  background-color: var(--secondary-color);
+}
+
+/* NavBar */
+
+.navlinks{
+  color: var(--accent-color);
+  font-family: var(--body-font-family);
+}
+
+/* Hero */
+
+.name{
+  color: var(--primary-color);
+  font-family: var(--head-font-family);
+  font-weight: 900;
+  
+}
+
+
+.available  {
+  font-family:  var(--additional-font);
+}
+
+.date {
+  font-family: var(--body-font-family);
+}
+
+.black-background{
+  background-color: #000000;
+}
+
+
+.section-title, .skill-title, .tools, .details {
+  color: var(--accent-color);
+
+}
+
+.skills, .projects{
+  font-family: var(--body-font-family);
+}
+
+
+.tools{
+  font-family: var(--head-font-family);
+  font-weight: 800;
+  font-style: italic;
+}
+
+
+.details{
+  font-family: var(--body-font-family);
+}
+
+.horiz-gallery-wrapper {
+  overflow: hidden;
+}
+
+.horiz-gallery-strip {
+  display: flex;
+}
