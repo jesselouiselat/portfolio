@@ -90,7 +90,12 @@ export default function Footer() {
                 {external_links.map((item, id) => (
                   <li key={id}>
                     {" "}
-                    <a href={item.link} className=" capitalize">
+                    <a
+                      href={item.link}
+                      className=" capitalize"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
                       {item.website}
                     </a>
                   </li>

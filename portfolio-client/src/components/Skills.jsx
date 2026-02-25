@@ -106,6 +106,7 @@ export default function Skills() {
               <p className="details">{skill.details}</p>
             </div>
           ))}
+          <h1>Hello</h1>
         </div>
       </div>
     </>

@@ -181,10 +181,6 @@ export default function Hero() {
             Jesse Louise Lat
           </h1>
         </div>
-        <img
-          src="https://drive.google.com/thumbnail?id=1AxPRB1yDrR0CzYYe-jPekdTgMlpeEoFC"
-          alt=""
-        />
 
         <div className=" subheading md:row-span-2 flex justify-around  md:justify-between md:m-18 mt-9">
           <div className="availability">

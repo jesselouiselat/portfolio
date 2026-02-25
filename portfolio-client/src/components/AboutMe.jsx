@@ -53,7 +53,7 @@ export default function AboutMe() {
         <div className=" image col-span-3 flex flex-col justify-center items-center ">
           <img
             src={jesse_lat}
-            className=" grayscale-85 w-100 rounded-full"
+            className="grayscale opacity-85 w-80 h-80 rounded-full object-cover"
             alt="jesse-lat-pic"
           />
         </div>
