@@ -1,6 +1,8 @@
 import express from "express";
 import cors from "cors";
 
+import heroRoutes from "./routes/heroRoutes.js";
+
 const app = express();
 app.use(express.json());
 
@@ -10,6 +12,8 @@ app.use(
     credentials: "true",
   }),
 );
+
+app.use("/portfolio/hero", heroRoutes);
 
 app.get("/test", (req, res) => {
   console.log("Working!");
