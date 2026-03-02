@@ -3,24 +3,45 @@ import github_logo from "../assets/img/github_logo.jpg";
 import linkedin_logo from "../assets/img/linkedin_logo.jpg";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
+import { useState } from "react";
+import AxionInstance from "../api/AxionInstance";
+import axiosInstance from "../api/AxionInstance";
+import { useEffect } from "react";
 
 gsap.registerPlugin(SplitText);
 
 export default function Hero() {
+  const [heroDetails, setHeroDetails] = useState([]);
+
+  async function getHero() {
+    try {
+      const result = await axiosInstance.get("/portfolio/hero/aboutMeDetails");
+      console.log(result.data);
+
+      setHeroDetails(result.data);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  useEffect(() => {
+    getHero();
+  }, []);
+
   const external_links = [
     {
       website: "github",
-      link: "https://github.com/jesselouiselat",
       logo: github_logo,
     },
     {
       website: "linkedin",
-      link: "https://linkedin.com/in/jesselouiselat",
       logo: linkedin_logo,
     },
   ];
 
   useGSAP(() => {
+    if (heroDetails.length === 0) return;
+
     document.fonts.ready.then(() => {
       try {
         const tl = gsap.timeline();
@@ -159,7 +180,7 @@ export default function Hero() {
       innerX(0);
       innerY(0);
     });
-  }, []);
+  }, [heroDetails]);
 
   return (
     <>
@@ -167,40 +188,53 @@ export default function Hero() {
         id="about_me"
         className=" h-[20vh] md:h-screen sm:flex md:grid grid-cols-1 grid-rows-5 "
       >
-        <svg
-          className="overlay fixed top-0 left-0 w-full h-full z-50"
-          viewBox="0 0 200 200"
-        >
-          <path
-            d="M100,0 m-50,0 a50,50 0 1,0 100,0 a50,50 0 1,0 -100,0"
-            fill="black"
-          />
-        </svg>
-        <div className="name-outer md:row-span-3 flex flex-col justify-center">
-          <h1 className="name text-center text-4xl md:text-8xl uppercase">
-            Jesse Louise Lat
-          </h1>
-        </div>
+        {heroDetails.map((detail, id) => (
+          <div key={id}>
+            <svg
+              className="overlay fixed top-0 left-0 w-full h-full z-50"
+              viewBox="0 0 200 200"
+            >
+              <path
+                d="M100,0 m-50,0 a50,50 0 1,0 100,0 a50,50 0 1,0 -100,0"
+                fill="black"
+              />
+            </svg>
+            <div className="name-outer md:row-span-3 flex flex-col justify-center">
+              <h1 className="name text-center text-4xl md:text-8xl uppercase">
+                {detail.name}
+              </h1>
+            </div>
 
-        <div className=" subheading md:row-span-2 flex justify-around  md:justify-between md:m-18 mt-9">
-          <div className="availability">
-            <p className="available text-sm md:text-base">Availabe for work</p>
-            <h6 className=" date text-lg md:text-4xl"> Feb' 2026</h6>
+            <div className=" subheading md:row-span-2 flex justify-around  md:justify-between md:m-18 mt-9">
+              <div className="availability">
+                <p className="available text-sm md:text-base">
+                  Availabe for work
+                </p>
+                <h6 className=" date text-lg md:text-4xl">
+                  {" "}
+                  {detail.additional_details.availability}
+                </h6>
+              </div>
+              <ul className="external-links flex justify-end ">
+                {external_links.map((link) => (
+                  <li key={link.website}>
+                    <a
+                      href={detail.additional_details.links[link.website]}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <img
+                        src={link.logo}
+                        className="w-10 md:w-15 "
+                        alt={link.website}
+                      />
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
           </div>
-          <ul className="external-links flex justify-end ">
-            {external_links.map((link) => (
-              <li key={link.website}>
-                <a href={link.link} target="_blank" rel="noopener noreferrer">
-                  <img
-                    src={link.logo}
-                    className="w-10 md:w-15 "
-                    alt={link.website}
-                  />
-                </a>
-              </li>
-            ))}
-          </ul>
-        </div>
+        ))}
       </div>
     </>
   );
