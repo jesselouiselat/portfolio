@@ -1,31 +1,31 @@
-import { SplitText } from "gsap/all";
+import React from "react";
+
+import { ScrambleTextPlugin, SplitText } from "gsap/all";
 import github_logo from "../assets/img/github_logo.jpg";
 import linkedin_logo from "../assets/img/linkedin_logo.jpg";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { useState } from "react";
-import AxionInstance from "../api/AxionInstance";
 import axiosInstance from "../api/AxionInstance";
 import { useEffect } from "react";
 
-gsap.registerPlugin(SplitText);
+gsap.registerPlugin(SplitText, ScrambleTextPlugin);
 
 export default function Hero() {
   const [heroDetails, setHeroDetails] = useState([]);
 
-  async function getHero() {
-    try {
-      const result = await axiosInstance.get("/portfolio/hero/aboutMeDetails");
-      console.log(result.data);
-
-      setHeroDetails(result.data);
-    } catch (error) {
-      console.error(error);
-    }
-  }
-
   useEffect(() => {
-    getHero();
+    (async () => {
+      try {
+        const result = await axiosInstance.get(
+          "/portfolio/hero/aboutMeDetails",
+        );
+
+        setHeroDetails(result.data);
+      } catch (error) {
+        console.error(error);
+      }
+    })();
   }, []);
 
   const external_links = [
@@ -39,185 +39,78 @@ export default function Hero() {
     },
   ];
 
-  useGSAP(() => {
-    if (heroDetails.length === 0) return;
-
-    document.fonts.ready.then(() => {
-      try {
-        const tl = gsap.timeline();
-
-        tl.to(".overlay path", {
-          duration: 0.8,
-          ease: "power3.inOut",
-          scale: 10,
-          transformOrigin: "50% 50% ",
-        }).to(".overlay", {
-          opacity: 0,
-          duration: 0.1,
-          ease: "power2.out",
-          onComplete: () => {
-            const ov = document.querySelector(".overlay");
-            if (ov) ov.style.display = "none";
+  useEffect(() => {
+    if (heroDetails.length > 0) {
+      document.fonts.ready.then(() => {
+        const tl = gsap.timeline({
+          scrollTrigger: {
+            trigger: "#about_me",
+            start: "top top",
+            end: "bottom bottom",
+            toggleActions: "play reverse restart none",
           },
         });
+        tl.play(0);
 
-        let nameSplit, availabilitySplit, dateSplit;
-        try {
-          nameSplit = new SplitText(".name", { type: "words" });
-          availabilitySplit = new SplitText(".available", { type: "lines" });
-          dateSplit = new SplitText(".date", { type: "lines" });
-        } catch (e) {
-          nameSplit = null;
-          availabilitySplit = null;
-          dateSplit = null;
-        }
+        const nameSplit = new SplitText(".name", { type: "words" });
 
-        if (nameSplit && nameSplit.words) {
-          gsap.from(nameSplit.words, {
-            yPercent: -150,
-            opacity: 0,
-            duration: 1.5,
-            ease: "power1.out",
-            stagger: 0.06,
-            delay: 1,
-          });
-        } else {
-          gsap.from(".name", {
-            yPercent: -50,
-            opacity: 0,
-            duration: 1.2,
-            ease: "power1.out",
-            delay: 1,
-          });
-        }
-
-        if (availabilitySplit && availabilitySplit.lines) {
-          gsap.from(availabilitySplit.lines, {
-            opacity: 0,
-            yPercent: 100,
-            duration: 1.8,
-            ease: "expo.out",
-            stagger: 0.01,
-            delay: 2,
-          });
-        } else {
-          gsap.from(".available", {
-            opacity: 0,
-            yPercent: 20,
-            duration: 1.2,
-            delay: 2,
-          });
-        }
-
-        if (dateSplit && dateSplit.lines) {
-          gsap.from(dateSplit.lines, {
-            opacity: 0,
-            yPercent: 100,
-            duration: 1.8,
-            ease: "expo.out",
-            stagger: 0.01,
-            delay: 2,
-          });
-        } else {
-          gsap.from(".date", {
-            opacity: 0,
-            yPercent: 20,
-            duration: 1.2,
-            delay: 2,
-          });
-        }
-
-        gsap.fromTo(
-          ".external-links img",
-          { opacity: 0, y: 30 },
+        tl.from(nameSplit.words, {
+          yPercent: -150,
+          opacity: 0,
+          duration: 1,
+          ease: "power3.inOut",
+          stagger: 0.3,
+        }).fromTo(
+          [".external-link", ".availability"],
           {
-            opacity: 1,
-            y: 0,
-            duration: 1.2,
-            ease: "expo.out",
-            stagger: 0.2,
-            delay: 2,
+            y: 50,
+            opacity: 0,
+            duration: 1,
+            ease: "power3.inOut",
           },
+          {
+            y: 0,
+            opacity: 1,
+            stagger: 0.06,
+          },
+          "<0.5",
         );
-      } catch (err) {
-        // ensure overlay is removed if animation setup fails
-        // eslint-disable-next-line no-console
-        console.warn("Hero animations failed:", err);
-        const ov = document.querySelector(".overlay");
-        if (ov) ov.style.display = "none";
-      }
-    });
-
-    // Safety fallback: hide overlay after 3s in case animations never run
-    setTimeout(() => {
-      const ov = document.querySelector(".overlay");
-      if (ov && ov.style.display !== "none") ov.style.display = "none";
-    }, 3000);
-
-    const main = document.querySelector(".name");
-
-    gsap.set(".name", { perspective: 650 });
-
-    const outerRX = gsap.quickTo(".name-outer", "rotationX", {
-      ease: "power3",
-    });
-    const outerRY = gsap.quickTo(".name-outer", "rotationY", {
-      ease: "power3",
-    });
-    const innerX = gsap.quickTo(".name", "x", { ease: "power3" });
-    const innerY = gsap.quickTo(".name", "y", { ease: "power3" });
-
-    main.addEventListener("pointermove", (e) => {
-      outerRX(gsap.utils.interpolate(15, -15, e.y / window.innerHeight));
-      outerRY(gsap.utils.interpolate(-15, 15, e.x / window.innerWidth));
-      innerX(gsap.utils.interpolate(-30, 30, e.x / window.innerWidth));
-      innerY(gsap.utils.interpolate(-30, 30, e.y / window.innerHeight));
-    });
-
-    main.addEventListener("pointerleave", (e) => {
-      outerRX(0);
-      outerRY(0);
-      innerX(0);
-      innerY(0);
-    });
+      });
+    }
   }, [heroDetails]);
 
   return (
-    <>
-      <div
-        id="about_me"
-        className=" h-[20vh] md:h-screen sm:flex md:grid grid-cols-1 grid-rows-5 "
-      >
-        {heroDetails.map((detail, id) => (
-          <div key={id}>
-            <svg
-              className="overlay fixed top-0 left-0 w-full h-full z-50"
-              viewBox="0 0 200 200"
+    <div
+      id="about_me"
+      className="h-screen flex flex-col justify-evenly md:grid grid-cols-1 grid-rows-5"
+    >
+      {heroDetails.map((detail, id) => (
+        <React.Fragment key={id}>
+          {/* Full name */}
+          <div className="flex items-center justify-center md:row-span-3">
+            <h1
+              key={`name-${id}`}
+              className="name font-arimo font-semibold md:text-center text-6xl md:text-8xl uppercase p-8"
             >
-              <path
-                d="M100,0 m-50,0 a50,50 0 1,0 100,0 a50,50 0 1,0 -100,0"
-                fill="black"
-              />
-            </svg>
-            <div className="name-outer md:row-span-3 flex flex-col justify-center">
-              <h1 className="name text-center text-4xl md:text-8xl uppercase">
-                {detail.name}
-              </h1>
-            </div>
+              {detail.name}
+            </h1>
+          </div>
 
-            <div className=" subheading md:row-span-2 flex justify-around  md:justify-between md:m-18 mt-9">
+          {/* Availability + Links */}
+          <div className="md:row-span-2 ">
+            <div className="flex flex-col gap-7 md:flex-row md:h-full md:items-center md:justify-between px-15 ">
               <div className="availability">
-                <p className="available text-sm md:text-base">
-                  Availabe for work
+                <p className="font-playfair text-lg md:text-base ">
+                  Available for work
                 </p>
-                <h6 className=" date text-lg md:text-4xl">
-                  {" "}
+                <h6 className="font-dmsans text-2xl md:text-4xl">
                   {detail.additional_details.availability}
                 </h6>
               </div>
-              <ul className="external-links flex justify-end ">
+
+              <ul className=" flex md:justify-end gap-4 ">
                 {external_links.map((link) => (
-                  <li key={link.website}>
+                  <li key={link.website} className="external-link">
                     <a
                       href={detail.additional_details.links[link.website]}
                       target="_blank"
@@ -225,7 +118,7 @@ export default function Hero() {
                     >
                       <img
                         src={link.logo}
-                        className="w-10 md:w-15 "
+                        className="w-10 md:w-16"
                         alt={link.website}
                       />
                     </a>
@@ -234,8 +127,8 @@ export default function Hero() {
               </ul>
             </div>
           </div>
-        ))}
-      </div>
-    </>
+        </React.Fragment>
+      ))}
+    </div>
   );
 }

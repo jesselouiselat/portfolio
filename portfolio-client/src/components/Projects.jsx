@@ -1,171 +1,120 @@
 import gsap from "gsap";
-import screenshot1 from "../assets/img/screenshots/screenshot_1.png";
-import screenshot2 from "../assets/img/screenshots/screenshot_2.png";
-import screenshot3 from "../assets/img/screenshots/screenshot_3.png";
-import screenshot4 from "../assets/img/screenshots/screenshot_4.png";
-import screenshot5 from "../assets/img/screenshots/screenshot_5.png";
-import screenshot6 from "../assets/img/screenshots/screenshot_6.png";
-import screenshot7 from "../assets/img/screenshots/screenshot_7.png";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { useGSAP } from "@gsap/react";
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { SplitText } from "gsap/all";
+import axiosInstance from "../api/AxionInstance";
+import { ScrollSmoother } from "gsap/ScrollSmoother";
 
-gsap.registerPlugin(ScrollTrigger, SplitText);
+gsap.registerPlugin(ScrollTrigger, SplitText, ScrollSmoother);
 
 export default function Projects() {
-  const projects = [
-    {
-      projectTitle: "Islatambay Freediving",
-      projectDescription: `is a full-stack freediving website with user browsing, admin-managed
-          content, and a Google AI assistant. Built with React, JavaScript,
-          Supabase, and Cloudinary, it features Google authentication, a
-          responsive UI, smooth GSAP animations, and full admin control over
-          what displays on the site.
-      `,
-      screenshots: [
-        screenshot1,
-        screenshot2,
-        screenshot3,
-        screenshot4,
-        screenshot5,
-        screenshot6,
-      ],
-    },
-    {
-      projectTitle: "Task Manager",
-      projectDescription: `this is a task manager.
-      `,
-      screenshots: [
-        screenshot1,
-        screenshot2,
-        screenshot3,
-        screenshot4,
-        screenshot5,
-        screenshot6,
-      ],
-    },
-  ];
-
+  const [projects, setProjects] = useState([]);
   const sectionRef = useRef(null);
 
-  useGSAP(() => {
+  useEffect(() => {
     try {
-      gsap.utils.toArray(".project-section").forEach((section) => {
-        const tl = gsap.timeline({
+      (async () => {
+        const result = await axiosInstance.get(
+          "/portfolio/projects/getProjects",
+        );
+        setProjects(result.data);
+      })();
+    } catch (error) {
+      console.error(error);
+    }
+  }, []);
+  useEffect(() => {
+    if (projects.length === 0) return;
+
+    let ctx = gsap.context(() => {
+      const rows = gsap.utils.toArray(".project-row");
+
+      rows.forEach((row) => {
+        const line = row.querySelector(".image-line");
+        const titleEl = row.querySelector(".project-title");
+        const descEl = row.querySelector(".project-description");
+
+        const scrollAmount = line.scrollWidth - window.innerWidth;
+        gsap.to(line, {
+          x: -scrollAmount,
+          ease: "none",
           scrollTrigger: {
-            trigger: section,
-            start: "top center",
-            end: "+=1%",
+            trigger: row,
+            start: "top top",
+            end: () => `+=${line.scrollWidth * 0.5}`,
             pin: true,
-            pinSpacing: true,
-            scrub: 4,
+            scrub: 1,
+            invalidateOnRefresh: true,
           },
         });
 
-        const titleEl = section.querySelector(".project-title");
-        const descEl = section.querySelector(".project-description");
+        const titleSplit = new SplitText(titleEl, { type: "chars" });
+        const descriptionSplit = new SplitText(descEl, { type: "lines" });
 
-        let projectTitle, projectDescription;
-        try {
-          projectTitle = new SplitText(titleEl, { type: "chars" });
-          projectDescription = new SplitText(descEl, { type: "lines" });
-        } catch (e) {
-          projectTitle = null;
-          projectDescription = null;
-        }
-
-        if (projectTitle && projectTitle.chars) {
-          gsap.from(projectTitle.chars, {
-            opacity: 0,
-            yPercent: 100,
-            stagger: 0.1,
-            duration: 0.2,
-            ease: "power1.inOut",
-
-            scrollTrigger: {
-              trigger: section,
-              start: "center bottom",
-              once: true,
-            },
-          });
-        } else if (titleEl) {
-          gsap.from(titleEl, {
-            opacity: 0,
-            yPercent: 20,
-            duration: 0.2,
-            ease: "power1.inOut",
-            scrollTrigger: {
-              trigger: section,
-              start: "bottom top",
-              once: true,
-            },
-          });
-        }
-
-        if (projectDescription && projectDescription.lines) {
-          gsap.from(projectDescription.lines, {
-            opacity: 0,
-            yPercent: 100,
-            stagger: 0.5,
-            duration: 0.8,
-            ease: "expo.out",
-            scrollTrigger: {
-              trigger: section,
-              start: "top center",
-              once: true,
-            },
-          });
-        } else if (descEl) {
-          gsap.from(descEl, {
-            opacity: 0,
-            yPercent: 20,
-            duration: 0.8,
-            ease: "expo.out",
-            scrollTrigger: {
-              trigger: section,
-              start: "center bottom",
-              once: true,
-            },
-          });
-        }
-
-        tl.from(section, { x: 200, opacity: 0 });
-
-        const images = section.querySelectorAll("img");
-        tl.from(images, { x: -50, opacity: 0, stagger: 0.2 }, "+=0.5");
+        gsap.from([titleSplit.chars, descriptionSplit.lines], {
+          yPercent: 150,
+          opacity: 0,
+          duration: 1,
+          ease: "power4.out",
+          stagger: 0.02,
+          scrollTrigger: {
+            trigger: row,
+            start: "top 85%",
+            toggleActions: "play reverse restart reverse",
+          },
+        });
       });
-    } catch (err) {
-      console.warn("GSAP Projects animation prevented:", err);
-    }
-  }, []);
+    }, sectionRef);
+
+    return () => ctx.revert();
+  }, [projects]);
 
   return (
-    <div className=" w-full  " ref={sectionRef} id="projects">
+    <div ref={sectionRef} className="">
+      {/* Header Section */}
+      <div className="md:h-[25vh] flex items-end md:p-12 p-9 md:justify-start justify-center ">
+        <h1 className="font-dmsans md:text-8xl text-5xl font-bold  uppercase  md:tracking-tighter tracking-wide">
+          Projects
+        </h1>
+      </div>
+
       {projects.map((project, id) => (
-        <div key={id} className="project-section   grid grid-cols-3">
-          {/* Left column */}
-          <div className="col-span-1 flex flex-col gap-5 p-9">
-            <h1 className="projects text-4xl md:text-7xl font-bold">
-              Projects
-            </h1>
-            <p className="project-title text-4xl">{project.projectTitle}</p>
-            <p className="project-description">{project.projectDescription}</p>
-          </div>
-          {/* Right column */}
-          <div className="col-span-2  p-8 rounded-4xl">
-            <div className="flex flex-wrap justify-center gap-5 content-start">
-              {project.screenshots.map((img, i) => (
-                <img
-                  key={i}
-                  src={img}
-                  alt=""
-                  className="md:w-65 w-15 rounded-3xl"
-                />
-              ))}
+        <section
+          key={id}
+          className="project-row h-screen w-full flex flex-col justify-center overflow-hidden border-t border-zinc-800"
+        >
+          {/* Static Text Wrapper - This stays visible while pinned */}
+          <div className="px-12 mb-8 flex flex-col justify-between  w-full">
+            <div className="max-w-2xl">
+              <h2 className="project-title text-5xl font-dmsans font-bold mb-4">
+                {project.title}
+              </h2>
+              <p className="project-description text-zinc-400 font-arimo text-lg">
+                {project.description}
+              </p>
+            </div>
+            <div className="text-zinc-600 font-mono text-sm p-5 text-end">
+              Project <span className="font-semibold">0{id + 1}</span> of 0
+              {projects.length}
             </div>
           </div>
-        </div>
+
+          {/* Scrolling Image Track */}
+          <div className="image-line flex gap-6 px-12 items-center">
+            {project.screenshots.map((img, i) => (
+              <div
+                key={i}
+                className="project-img shrink-0 w-100 md:w-150 aspect-video bg-zinc-900 shadow-xl overflow-hidden"
+              >
+                <img
+                  src={img}
+                  alt={`${project.title} screenshot ${i}`}
+                  className="w-full h-full object-cover"
+                />
+              </div>
+            ))}
+          </div>
+        </section>
       ))}
     </div>
   );

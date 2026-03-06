@@ -4,7 +4,6 @@ export const aboutMeDetails = async (req, res) => {
   try {
     const result = await pool.query("SELECT * FROM about_me");
     const details = result.rows;
-    console.log(details);
 
     return res.status(200).json(details);
   } catch (error) {

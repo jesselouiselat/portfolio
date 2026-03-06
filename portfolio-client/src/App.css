@@ -25,57 +25,31 @@ body {
 
 /* Hero */
 
-.name{
-  color: var(--primary-color);
-  font-family: var(--head-font-family);
-  font-weight: 900;
-  
+.font-arimo {
+  font-family: 'Arimo', sans-serif;
+}
+
+.font-dmsans {
+  font-family: 'DM Sans', sans-serif;
+}
+
+.font-playfair {
+  font-family: 'Playfair Display', serif;
 }
 
 
-.available  {
-  font-family:  var(--additional-font);
+.color-dirtyWhite{
+  color: var(--secondary-color);
 }
 
-.date {
-  font-family: var(--body-font-family);
+.color-lightGray{
+  color: var(--accent-color)
 }
 
-.black-background{
-  background-color: #000000;
+.no-scrollbar {
+  -ms-overflow-style: none;
+  /* IE and Edge */
+  scrollbar-width: none;
+  /* Firefox */
 }
 
-
-.section-title, .skill-title, .tools, .details {
-  color: var(--accent-color);
-
-}
-
-.skills, .projects{
-  font-family: var(--body-font-family);
-}
-
-
-.tools{
-  font-family: var(--head-font-family);
-  font-weight: 800;
-  font-style: italic;
-}
-
-
-.details{
-  font-family: var(--body-font-family);
-}
-
-.skill-panel {
-  padding: 1rem;
-  display: block;
-}
-
-.horiz-gallery-wrapper {
-  overflow: hidden;
-}
-
-.horiz-gallery-strip {
-  display: flex;
-}

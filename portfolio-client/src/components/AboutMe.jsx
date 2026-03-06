@@ -8,40 +8,42 @@ gsap.registerPlugin(ScrollTrigger, ScrambleTextPlugin, SplitText);
 
 export default function AboutMe() {
   useGSAP(() => {
-    const tl = gsap.timeline({
-      scrollTrigger: {
-        trigger: ".about-me",
-        start: "center 70%",
-        toggleActions: "play none none reverse",
-      },
-    });
-    tl.from([".title", ".image"], {
-      x: 200,
-      opacity: 0,
-      ease: "expo.inOut",
-      duration: 1.2,
-    });
-    tl.from(".title", {
-      duration: 0.7,
-      scrambleText: {
-        chars: "XO",
-        text: "jesse_lat",
-        speed: 2,
-      },
-    });
-
-    const splitDetails = new SplitText(".details", { type: "lines" });
-
-    tl.from(
-      splitDetails.lines,
-      {
-        duration: 1,
-        y: 200,
-        ease: "back.inOut",
+    document.fonts.ready.then(() => {
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: ".about-me",
+          start: "center 85%",
+          toggleActions: "play none none reverse",
+        },
+      });
+      tl.from([".title"], {
+        x: 200,
         opacity: 0,
-      },
-      "<0.2",
-    );
+        ease: "expo.inOut",
+        duration: 1.2,
+      });
+      tl.from(".title", {
+        duration: 0.7,
+        scrambleText: {
+          chars: "XO",
+          text: "jesse_lat",
+          speed: 2,
+        },
+      });
+
+      const splitDetails = new SplitText(".details", { type: "lines" });
+
+      tl.from(
+        splitDetails.lines,
+        {
+          duration: 1,
+          y: 200,
+          ease: "back.inOut",
+          opacity: 0,
+        },
+        "<0.2",
+      );
+    });
   }, []);
 
   return (
