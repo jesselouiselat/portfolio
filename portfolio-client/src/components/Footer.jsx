@@ -56,16 +56,16 @@ export default function Footer() {
 
   return (
     <>
-      <div id="footer" className="grid grid-cols-5 p-8">
+      <div id="footer" className="grid grid-cols-5 p-8 bg-black">
         <div className="col-span-2">
-          <h2 className=" font-semibold">Menu</h2>
-          <hr className="w-[90%] mb-2" />
+          <h2 className=" font-semibold text-zinc-100">Menu</h2>
+          <hr className="w-[90%] mb-2 text-zinc-100" />
           <ul>
             {navigation.map((item, id) => (
               <li key={id}>
                 <a
                   href={item.href}
-                  className=" capitalize"
+                  className=" capitalize text-zinc-100"
                   onClick={(e) => {
                     e.preventDefault;
                     gsap.to(window, {
@@ -84,15 +84,15 @@ export default function Footer() {
         <div className="col-span-3 ">
           <div className="grid grid-rows-3 gap-15">
             <div className="row-span-2">
-              <h2 className=" font-semibold">Socials</h2>
-              <hr className="w-[90%] mb-2" />
+              <h2 className=" font-semibold text-zinc-100">Socials</h2>
+              <hr className="w-[90%] mb-2 text-zinc-100" />
               <ul>
                 {external_links.map((item, id) => (
                   <li key={id}>
                     {" "}
                     <a
                       href={item.link}
-                      className=" capitalize"
+                      className=" capitalize text-zinc-100"
                       target="_blank"
                       rel="noopener noreferrer"
                     >
@@ -103,10 +103,33 @@ export default function Footer() {
               </ul>
             </div>
             <div className="row-span-1">
-              <p className=" font-semibold">Current Philippine Time:</p>
-              <p>{time} </p>{" "}
+              <div className="">
+                <p className="mb-5 text-zinc-100">© 2026 JESSE LAT</p>
+              </div>
+              <p className=" font-semibold text-zinc-100">
+                Current Philippine Time:
+              </p>
+              <p className="text-zinc-100">{time} </p>
             </div>
           </div>
+        </div>
+        <div className=" bottom-6">
+          <button
+            className="group flex items-center bg-zinc-900 text-zinc-600 p-5 rounded-3xl hover:bg-zinc-600 hover:text-zinc-900 transition-all duration-500 ease-in-out"
+            onClick={() => {
+              gsap.to(window, {
+                duration: 2,
+                scrollTo: { y: 0 },
+                ease: "power4.inOut",
+              });
+            }}
+          >
+            <span className="md:text-4xl text-2xl font-dmsans">↑</span>
+
+            <span className="max-w-0 opacity-0 overflow-hidden whitespace-nowrap group-hover:max-w-xs group-hover:opacity-100 group-hover:ml-3 transition-all duration-500 ease-in-out text-lg font-dmsans font-medium">
+              Back to Top
+            </span>
+          </button>
         </div>
       </div>
     </>

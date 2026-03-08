@@ -1,12 +1,9 @@
-import { useState } from "react";
 import { ScrollToPlugin } from "gsap/ScrollToPlugin";
 import gsap from "gsap";
 
 gsap.registerPlugin(ScrollToPlugin);
 
 export default function Navbar() {
-  const [isNavOpen, setNavIsOpen] = useState(false);
-
   const navigation = [
     { name: "skills", href: "#skills" },
     { name: "projects", href: "#projects" },
@@ -29,7 +26,7 @@ export default function Navbar() {
                     ease: "power2.inOut",
                   });
                 }}
-                className="navlinks md:font-medium"
+                className="font-dmsans text-zinc-400 md:font-medium hover:text-xl hover:text-zinc-600 transition-all"
               >
                 {item.name}
               </p>

@@ -1,9 +1,18 @@
 import { pool } from "../config/db.js";
+import { mapStorageUrls } from "../utils/mapStorageUrls.js";
 
 export const aboutMeDetails = async (req, res) => {
   try {
     const result = await pool.query("SELECT * FROM about_me");
-    const details = result.rows;
+    const details = result.rows.map((detail) => ({
+      ...detail,
+      additional_details: {
+        ...detail.additional_details,
+        resume: mapStorageUrls("Resume", detail.additional_details.resume),
+      },
+    }));
+
+    console.log(details);
 
     return res.status(200).json(details);
   } catch (error) {

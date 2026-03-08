@@ -1,100 +1,126 @@
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/all";
+import { useEffect, useRef } from "react";
 
 gsap.registerPlugin(ScrollTrigger);
 
 export default function Contact() {
-  useGSAP(() => {
-    const tl = gsap.timeline({
-      scrollTrigger: {
-        trigger: ".contact-section",
-        start: "top center",
-        toggleActions: "play none none reverse",
-      },
-    });
+  const contactRef = useRef(null);
 
-    tl.from(
-      gsap.utils.toArray(".contact-form .flex-1, .contact-form > div , button"),
-      {
+  useEffect(() => {
+    if (!contactRef.current) return;
+    let ctx = gsap.context(() => {
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: contactRef.current,
+          start: "top 40%",
+          end: "center top",
+          toggleActions: "play reverse restart reverse",
+        },
+      });
+      tl.from(".contact-bg-text", {
+        y: 100,
         opacity: 0,
-        y: 50,
-        duration: 0.3,
-        ease: "power2.out",
-        stagger: 0.1,
-      },
-    );
+        duration: 1.5,
+        ease: "power4.out",
+      });
+
+      tl.from(
+        ".form-element",
+        {
+          opacity: 0,
+          y: 30,
+          duration: 0.8,
+          stagger: 0.1,
+          ease: "power3.out",
+        },
+        "<",
+      );
+    }, contactRef);
+    return () => ctx.revert();
   }, []);
+
   return (
     <div
-      className="contact-section relative  px-6 py-24 sm:py-32 lg:px-8"
+      ref={contactRef}
+      className="contact-section relative bg-zinc-950 px-6 py-32 overflow-hidden"
       id="contact"
     >
-      <div className="contact-form">
-        <div className="mx-auto max-w-2xl text-center">
-          <h2 className=" text-4xl font-semibold tracking-tight text-balance text-gray-900 sm:text-5xl">
-            Connect with me
-          </h2>
-        </div>
+      {/* Large Background Text for depth */}
+      <div className="absolute left-1/2 -translate-x-1/2 pointer-events-none select-none">
+        <h2 className="font-dmsans contact-bg-text text-[21vw] font-bold text-zinc-900 leading-none">
+          CONTACT
+        </h2>
+      </div>
+
+      <div className="relative z-10 mx-auto max-w-4xl">
         <form
           action="#"
           method="POST"
-          className="mx-auto mt-10 max-w-xl sm:mt-10"
+          className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-12"
         >
-          <div className="flex gap-4">
-            <div className="flex-1">
-              <label
-                htmlFor="name"
-                className="block text-sm font-semibold text-gray-900"
-              >
-                Name
-              </label>
-              <input
-                id="name"
-                name="name"
-                type="text"
-                className="w-full rounded-md bg-white px-3.5 py-2 text-base text-gray-900 outline  outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:outline-gray-600"
-              />
-            </div>
-
-            <div className="flex-1">
-              <label
-                htmlFor="email"
-                className="block text-sm font-semibold text-gray-900"
-              >
-                Email
-              </label>
-              <input
-                id="email"
-                name="email"
-                type="email"
-                className="w-full rounded-md bg-white px-3.5 py-2 text-base text-gray-900 outline  outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:outline-gray-600"
-              />
-            </div>
+          {/* Name Field */}
+          <div className="form-element group relative">
+            <label
+              htmlFor="name"
+              className="block font-dmsans text-xs uppercase tracking-widest text-zinc-300  group-focus:text-lg  transition-all group-focus-within:text-white duration-300"
+            >
+              Name
+            </label>
+            <input
+              id="name"
+              name="name"
+              type="text"
+              placeholder="Juan Dela Cruz"
+              className="w-full font-arimo bg-transparent border-b group-hover:text-xl  border-zinc-600 py-2 text-zinc-100 outline-none focus:border-white hover:border-white transition-all placeholder:text-zinc-500 duration-300"
+            />
           </div>
-          <div className="flex-1 mt-6">
+
+          {/* Email Field */}
+          <div className="form-element group relative">
+            <label
+              htmlFor="email"
+              className="block font-dmsans text-xs uppercase tracking-widest text-zinc-300  group-focus:text-lg  transition-all group-focus-within:text-white duration-300"
+            >
+              Email Address
+            </label>
+            <input
+              id="email"
+              name="email"
+              type="email"
+              placeholder="juandelacruz@email.com"
+              className="w-full font-arimo bg-transparent border-b group-hover:text-xl  border-zinc-600 py-2 text-zinc-100 outline-none focus:border-white hover:border-white transition-all placeholder:text-zinc-500 duration-300"
+            />
+          </div>
+
+          {/* Message Field */}
+          <div className="form-element md:col-span-2 group relative">
             <label
               htmlFor="message"
-              className="block text-sm/6 font-semibold text-gray-900"
+              className="block font-dmsans text-xs uppercase tracking-widest text-zinc-300  group-focus:text-lg  transition-all group-focus-within:text-white duration-300"
             >
-              Message
+              Your Message
             </label>
-            <div className="mt-2.5">
-              <textarea
-                id="message"
-                name="message"
-                rows={4}
-                className="block w-full rounded-md bg-white px-3.5 py-2 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-gray-600"
-                defaultValue={""}
-              />
-            </div>
+            <textarea
+              id="message"
+              name="message"
+              rows={2}
+              placeholder="Tell me about your project..."
+              className="w-full font-arimo bg-transparent border-b group-hover:text-xl  border-zinc-600 py-2 text-zinc-100 outline-none focus:border-white hover:border-white transition-all placeholder:text-zinc-500 duration-300"
+            />
           </div>
-          <div className="mt-10">
+
+          {/* Submit Button */}
+          <div className="group form-element md:col-span-2 flex justify-center mt-5">
             <button
               type="submit"
-              className="block w-full rounded-md bg-gray-900 px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-xs hover:bg-gray-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-600"
+              className="group relative px-8 py-4 bg-zinc-900 text-zinc-200 group-hover:bg-zinc-200 group-hover:text-zinc-900 font-bold uppercase tracking-widest overflow-hidden transition-all hover:pr-16"
             >
-              Let's talk
+              <span className="relative z-10 font-dmsans">Send Message</span>
+              <span className="absolute right-6 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-all">
+                →
+              </span>
             </button>
           </div>
         </form>
