@@ -13,9 +13,19 @@ app.use(express.json());
 
 const allowedOrigins = ["http://localhost:5173", ENV.FRONTEND_URL];
 
+if (ENV.NODE_ENV === "production") {
+  app.set("trust proxy", 1);
+}
+
 app.use(
   cors({
-    origin: allowedOrigins,
+    origin: (origin, callback) => {
+      const isLocal = !origin;
+      const isWhiteListed = allowedOrigins.includes(origin);
+
+      if (isLocal || isWhiteListed) return callback(null, true);
+      return callback(new Error("Origin not allowed."), false);
+    },
     credentials: true,
   }),
 );
