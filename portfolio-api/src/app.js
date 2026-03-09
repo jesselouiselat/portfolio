@@ -1,5 +1,6 @@
 import express from "express";
 import cors from "cors";
+import { ENV } from "./config/env.js";
 
 import heroRoutes from "./routes/heroRoutes.js";
 import skillsRoutes from "./routes/skillsRoutes.js";
@@ -10,9 +11,11 @@ import visitorLogger from "./middlewares/visitorLogger.js";
 const app = express();
 app.use(express.json());
 
+const allowedOrigins = ["http://localhost:5173", ENV.FRONTEND_URL];
+
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: allowedOrigins,
     credentials: true,
   }),
 );

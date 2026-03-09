@@ -27,4 +27,7 @@ export const ENV = {
   // sendgrid email
 
   SENDGRID_EMAIL_API: process.env.SENDGRID_EMAIL_API,
+
+  //   deployed frontend
+  FRONTEND_URL: process.env.FRONTEND_URL,
 };
