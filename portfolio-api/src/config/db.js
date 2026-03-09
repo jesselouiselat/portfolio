@@ -5,9 +5,9 @@ const { Pool } = pkg;
 
 let pool;
 
-if (ENV.DATABASE_URL) {
+if (ENV.SUPABASE_DATABASE_URL) {
   pool = new Pool({
-    connectionString: ENV.DATABASE_URL,
+    connectionString: ENV.SUPABASE_DATABASE_URL,
   });
 } else {
   pool = new Pool({

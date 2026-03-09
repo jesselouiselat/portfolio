@@ -18,6 +18,9 @@ export const ENV = {
   DB_NAME: process.env.DB_NAME,
 
   // supabase db - prod stage
+  SUPABASE_DATABASE_URL: process.env.SUPABASE_DATABASE_URL,
+
+  // supabase image
   SUPABASE_URL: process.env.SUPABASE_URL,
   SUPABASE_ANON_KEY: process.env.SUPABASE_ANON_KEY,
 
