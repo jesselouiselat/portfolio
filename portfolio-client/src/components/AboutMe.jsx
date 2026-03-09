@@ -3,7 +3,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { SplitText } from "gsap/all";
 import axiosInstance from "../api/AxionInstance";
 import { useEffect, useState, useRef } from "react";
-import jesse_lat from "../assets/img/jesse_lat_grad_pic.jpg";
+import jesse_lat from "../assets/img/jesse_lat_grad_pic.JPG";
 
 gsap.registerPlugin(ScrollTrigger, SplitText);
 
