@@ -12,8 +12,6 @@ export const aboutMeDetails = async (req, res) => {
       },
     }));
 
-    console.log(details);
-
     return res.status(200).json(details);
   } catch (error) {
     console.error(error);

@@ -48,7 +48,7 @@ export default function Hero() {
         const tl = gsap.timeline({
           scrollTrigger: {
             trigger: "#about_me",
-            start: "top top",
+            start: "center top",
             end: "bottom bottom",
             toggleActions: "play reverse restart none",
           },
