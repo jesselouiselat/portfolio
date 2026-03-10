@@ -103,7 +103,7 @@ export default function Contact() {
   return (
     <div
       ref={contactRef}
-      className="contact-section relative bg-zinc-950 px-6 py-32 overflow-hidden"
+      className="contact-section h-screen relative bg-zinc-950 px-6 py-32 overflow-hidden"
       id="contact"
     >
       {/* Large Background Text for depth */}

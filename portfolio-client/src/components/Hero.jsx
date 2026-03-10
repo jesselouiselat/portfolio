@@ -1,8 +1,8 @@
 import React from "react";
 
 import { ScrambleTextPlugin, SplitText } from "gsap/all";
-import github_logo from "../assets/img/github_logo.jpg";
-import linkedin_logo from "../assets/img/linkedin_logo.jpg";
+import github_logo from "../assets/img/github_logo.png";
+import linkedin_logo from "../assets/img/linkedin_logo.png";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { useState } from "react";
@@ -118,7 +118,7 @@ export default function Hero() {
                     download="Jesse_Louise_Lat_CV.pdf"
                     rel="noopener noreferrer"
                     target="blank"
-                    className="group resume flex items-center gap-3 w-fit px-6 py-3 border border-zinc-800 text-zinc-400 rounded-full hover:bg-zinc-900 hover:text-zinc-200 transition-all duration-300 font-mono text-sm"
+                    className="group resume flex items-center gap-3 w-fit md:px-6 md:py-3 px-4 py-1 border border-zinc-800 text-zinc-400 rounded-full hover:bg-zinc-900 hover:text-zinc-200 transition-all duration-300 font-mono text-sm"
                   >
                     <span className="group-hover:translate-y-1 transition-transform duration-500">
                       ↓
@@ -136,7 +136,7 @@ export default function Hero() {
                         >
                           <img
                             src={link.logo}
-                            className="w-10 md:w-16 hover:shadow-2xl hover:w-17 transition-all"
+                            className="w-10 md:w-16 hover:shadow-2xl grayscale opacity-75 hover:grayscale-0 hover:opacity-100 hover:w-17 transition-all"
                             alt={link.website}
                           />
                         </a>

@@ -16,11 +16,7 @@ body {
   background-color: var(--secondary-color);
 }
 
-/* NavBar */
 
-
-
-/* Hero */
 
 .font-arimo {
   font-family: 'Arimo', sans-serif;
@@ -34,19 +30,4 @@ body {
   font-family: 'Playfair Display', serif;
 }
 
-
-.color-dirtyWhite{
-  color: var(--secondary-color);
-}
-
-.color-lightGray{
-  color: var(--accent-color)
-}
-
-.no-scrollbar {
-  -ms-overflow-style: none;
-  /* IE and Edge */
-  scrollbar-width: none;
-  /* Firefox */
-}
 

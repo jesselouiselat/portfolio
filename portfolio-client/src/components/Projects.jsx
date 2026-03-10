@@ -25,28 +25,16 @@ export default function Projects() {
   }, []);
   useEffect(() => {
     if (projects.length === 0) return;
+
     document.fonts.ready.then(() => {
+      let mm = gsap.matchMedia();
+
       let ctx = gsap.context(() => {
         const rows = gsap.utils.toArray(".project-row");
 
         rows.forEach((row) => {
-          const line = row.querySelector(".image-line");
           const titleEl = row.querySelector(".project-title");
           const descEl = row.querySelector(".project-description");
-
-          const scrollAmount = line.scrollWidth - window.innerWidth;
-          gsap.to(line, {
-            x: -scrollAmount,
-            ease: "none",
-            scrollTrigger: {
-              trigger: row,
-              start: "top top",
-              end: () => `+=${line.scrollWidth * 0.5}`,
-              pin: true,
-              scrub: 1,
-              invalidateOnRefresh: true,
-            },
-          });
 
           const titleSplit = new SplitText(titleEl, { type: "chars" });
           const descriptionSplit = new SplitText(descEl, { type: "lines" });
@@ -60,13 +48,50 @@ export default function Projects() {
             scrollTrigger: {
               trigger: row,
               start: "top 85%",
-              toggleActions: "play reverse restart reverse",
+              toggleActions: "play none none reverse",
+            },
+          });
+          const images = row.querySelectorAll(".project-img");
+          gsap.from(images, {
+            opacity: 0,
+            y: 50,
+            stagger: 0.1,
+            duration: 0.8,
+            scrollTrigger: {
+              trigger: row,
+              start: "top center",
+              toggleActions: "play none none reverse",
             },
           });
         });
       }, sectionRef);
 
-      return () => ctx.revert();
+      mm.add("(min-width: 768px)", () => {
+        const rows = gsap.utils.toArray(".project-row");
+
+        rows.forEach((row) => {
+          const line = row.querySelector(".image-line");
+          const scrollAmount = line.scrollWidth - window.innerWidth;
+
+          gsap.to(line, {
+            x: -scrollAmount,
+            ease: "none",
+            scrollTrigger: {
+              trigger: row,
+              start: "top top",
+              end: () => `+=${line.scrollWidth * 0.5}`,
+              pin: true,
+              scrub: 1,
+              invalidateOnRefresh: true,
+            },
+          });
+        });
+      });
+
+      return () => {
+        ctx.revert();
+        mm.revert();
+      };
     });
   }, [projects]);
 
@@ -83,20 +108,20 @@ export default function Projects() {
       {projects.map((project, id) => (
         <section
           key={id}
-          className="project-row h-screen w-full flex flex-col justify-center overflow-hidden  "
+          className="project-row md:h-screen h-auto w-full flex flex-col justify-center overflow-hidden py-20 md:py-0"
         >
           {/* Static Text Wrapper - This stays visible while pinned */}
           <div className="group px-12 mb-8 flex flex-col justify-between  w-full">
-            <div className="max-w-2xl">
-              <h2 className="project-title text-5xl font-mono tracking-wider font-bold mb-4">
+            <div className="max-w-2xl w-full">
+              <h2 className="project-title md:text-5xl text-2xl font-mono md:tracking-wider font-bold mb-4 wrap-break-word leading-tight">
                 {project.title}
               </h2>
 
-              <p className="project-description group-hover:text-zinc-950 duration-300 transition-colors text-zinc-400 font-arimo tracking-tight text-lg">
+              <p className="project-description group-hover:text-zinc-950 duration-300 transition-colors text-zinc-400 font-arimo tracking-tight md:text-lg">
                 {project.description}
               </p>
 
-              <div className="h-0.5 w-0 group-hover:w-full mt-3 bg-zinc-700 transition-all duration-2000"></div>
+              <div className="h-0.5 w-0 group-hover:w-full mt-3 bg-zinc-700 transition-all duration-1000"></div>
             </div>
             <div className="flex gap-4 justify-end items-center px-5 font-mono text-xs uppercase tracking-[0.2em]">
               {project.live_url && (
@@ -143,11 +168,11 @@ export default function Projects() {
           </div>
 
           {/* Scrolling Image Track */}
-          <div className="image-line flex gap-6 px-12 items-center">
+          <div className="image-line flex md:flex-row flex-col gap-6 px-12 items-center">
             {project.screenshots.map((img, i) => (
               <div
                 key={i}
-                className="project-img shrink-0 w-100 md:w-150 aspect-video bg-zinc-900 shadow-xl overflow-hidden"
+                className="project-img shrink-0 w-full md:w-150 aspect-video bg-zinc-900 shadow-xl overflow-hidden"
               >
                 <img
                   src={img}

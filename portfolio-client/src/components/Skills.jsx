@@ -31,7 +31,7 @@ export default function Skills() {
             trigger: ".skills-panel",
             start: "top center",
             end: "bottom 10%",
-            toggleActions: "play reverse restart reverse",
+            toggleActions: "play none none reverse",
           },
         });
         skills.forEach((skill, i) => {
@@ -75,7 +75,7 @@ export default function Skills() {
           [ Core Skills]
         </span>
 
-        <h1 className="skill text-zinc-100 font-dmsans text-6xl md:text-8xl font-bold tracking-tighter leading-none mb-6">
+        <h1 className="skill text-zinc-100 font-dmsans text-5xl md:text-8xl font-bold tracking-tighter leading-none mb-6">
           Skills
         </h1>
 
@@ -87,13 +87,13 @@ export default function Skills() {
         {skills.map((skill, id) => (
           <div className="group relative" key={id}>
             {/* Tool Label */}
-            <h2 className="text-zinc-400 font-mono text-xl uppercase tracking-widest mb-2 group-hover:text-zinc-100 transition-colors duration-300">
+            <h2 className="text-zinc-400 font-mono md:text-xl uppercase tracking-widest mb-2 group-hover:text-zinc-100 transition-colors duration-300">
               // {skill.tools}
             </h2>
 
             {/* Scramble Text Target */}
             <p
-              className={`skills-details-${id} text-zinc-500 font-arimo text-xl md:text-lg leading-relaxed max-w-xl group-hover:text-zinc-300 transition-colors duration-500`}
+              className={`skills-details-${id} text-zinc-500 font-arimo text-lg md:text-xl leading-relaxed max-w-xl group-hover:text-zinc-300 transition-colors duration-500`}
             >
               {"_".repeat(24)}
             </p>
