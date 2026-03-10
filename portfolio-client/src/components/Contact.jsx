@@ -73,9 +73,8 @@ export default function Contact() {
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: contactRef.current,
-          start: "top 40%",
-          end: "center top",
-          toggleActions: "play reverse restart reverse",
+          start: "top 20%",
+          toggleActions: "play none none reverse",
         },
       });
       tl.from(".contact-bg-text", {
