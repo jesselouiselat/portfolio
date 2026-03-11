@@ -26,7 +26,6 @@ export default function Contact() {
       minute: "2-digit",
       second: "2-digit",
     });
-    console.log(time);
 
     if (!name || !email || !message) {
       setError("Please fill in all the fields first");

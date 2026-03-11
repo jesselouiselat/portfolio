@@ -16,7 +16,6 @@ export const sendEmail = async (req, res) => {
     minute: "2-digit",
     second: "2-digit",
   });
-  console.log(time);
 
   try {
     const msg = {
