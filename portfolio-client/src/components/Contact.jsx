@@ -16,6 +16,17 @@ export default function Contact() {
     const name = event.target.name.value.trim();
     const email = event.target.email.value.trim();
     const message = event.target.message.value.trim();
+    const time = new Date().toLocaleString("en-US", {
+      timeZone: "Asia/Manila",
+      hour12: true,
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
+    });
+    console.log(time);
 
     if (!name || !email || !message) {
       setError("Please fill in all the fields first");
@@ -48,6 +59,7 @@ export default function Contact() {
             name,
             email,
             message,
+            time,
             subject: "Email From Portfolio (via WEb3Form)",
           }),
         });

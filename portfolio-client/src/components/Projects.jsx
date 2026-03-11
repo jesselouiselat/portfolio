@@ -108,12 +108,12 @@ export default function Projects() {
       {projects.map((project, id) => (
         <section
           key={id}
-          className="project-row md:h-screen h-auto w-full flex flex-col justify-center overflow-hidden py-20 md:py-0"
+          className="project-row md:h-screen h-auto w-full flex flex-col justify-center overflow-hidden py-20 "
         >
           {/* Static Text Wrapper - This stays visible while pinned */}
           <div className="group px-12 mb-8 flex flex-col justify-between  w-full">
             <div className="max-w-2xl w-full">
-              <h2 className="project-title md:text-5xl text-2xl font-mono md:tracking-wider font-bold mb-4 wrap-break-word leading-tight">
+              <h2 className="project-title md:text-5xl text-2xl font-mono md:tracking-wider font-bold mb-2  wrap-break-word leading-tight">
                 {project.title}
               </h2>
 
@@ -161,14 +161,14 @@ export default function Projects() {
               )}
             </div>
 
-            <div className="text-zinc-600 font-mono text-sm p-5 text-end">
+            <div className="text-zinc-600 font-mono text-sm  text-end">
               Project <span className="font-semibold">0{id + 1}</span> of 0
               {projects.length}
             </div>
           </div>
 
           {/* Scrolling Image Track */}
-          <div className="image-line flex md:flex-row flex-col gap-6 px-12 items-center">
+          <div className="image-line flex md:flex-row flex-col gap-6 px-12  items-center">
             {project.screenshots.map((img, i) => (
               <div
                 key={i}
